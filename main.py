@@ -1,6 +1,8 @@
-def main():
-    print("Hello from ai-invoice-processor!")
+from fastapi import FastAPI
+
+app = FastAPI(title="AI Invoice Processor")
 
 
-if __name__ == "__main__":
-    main()
+@app.get("/")
+async def root():
+    return {"message": "API is running"}
