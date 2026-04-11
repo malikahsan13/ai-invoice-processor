@@ -1,6 +1,7 @@
 from fastapi import APIRouter, UploadFile, File
 import os
 import uuid
+from app.services.queue import push_job
 
 router = APIRouter()
 
@@ -18,6 +19,13 @@ async def upload_invoice(file: UploadFile = File(...)):
     with open(file_path, "wb") as f:
         content = await file.read()
         f.write(content)
+
+    job = {
+        "file_id": file_id,
+        "path": file_path
+    }
+
+    push_job(job)
 
     return {
         "file_id": file_id,
