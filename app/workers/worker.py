@@ -19,3 +19,7 @@ def start_worker():
                 print("Error:", e)
         else:
             time.sleep(2)
+
+
+if __name__ == "__main__":
+    start_worker()
