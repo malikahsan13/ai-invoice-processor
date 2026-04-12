@@ -15,3 +15,19 @@ def extract_invoice_data(text: str) -> dict:
     Text:
     {text}
     """
+
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {"role": "system", "content": "You are a precise data extraction assistant."},
+            {"role": "user", "content": prompt}
+        ],
+        temperature=0
+    )
+
+    content = response.choices[0].message.content
+
+    try:
+        return json.loads(content)
+    except:
+        return {"error": "Invalid JSON from AI", "raw": content}
