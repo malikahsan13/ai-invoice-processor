@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, DateTime
+from sqlalchemy import Column, String, Integer, DateTime, JSON
 from sqlalchemy.orm import declarative_base
 import datetime
 
@@ -11,5 +11,9 @@ class Invoice(Base):
     id = Column(Integer, primary_key=True)
     file_id = Column(String)
     filename = Column(String)
-    status = Column(String, default="pending")
+    status = Column(String, default="pending")  # pending, processing, completed, failed
+    
+    extracted_data = Column(JSON, nullable=True)
+    error = Column(String, nullable=True)
+    
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
