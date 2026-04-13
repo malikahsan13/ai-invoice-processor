@@ -19,6 +19,15 @@ async def upload_invoice(file: UploadFile = File(...)):
     with open(file_path, "wb") as f:
         content = await file.read()
         f.write(content)
+        
+    async with AsyncSessionLocal() as session:
+        invoice = Invoice(
+            file_id=file_id,
+            filename=file.filename,
+            status="pending"
+        )
+        session.add(invoice)
+        await session.commit()
 
     job = {
         "file_id": file_id,
