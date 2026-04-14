@@ -37,7 +37,11 @@ async def upload_invoice(file: UploadFile = File(...)):
     push_job(job)
 
     return {
-        "file_id": file_id,
-        "filename": file.filename,
-        "path": file_path
+        "status": "queued",
+        "file_id": file_id
     }
+    # return {
+    #     "file_id": file_id,
+    #     "filename": file.filename,
+    #     "path": file_path
+    # }
