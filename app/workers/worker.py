@@ -6,7 +6,19 @@ from app.models.invoice import Invoice
 from sqlalchemy.future import select
 
 def process_job(job):
-    print(f"Prossing {job}")
+    file_id = job["file_id"]
+    file_path = job["path"]
+    
+    asyncio.run(update_status(file_id, "processing"))
+    
+    try:
+        text = extract_text_from_pdf(file_path)
+        result = extract_invoice_data(text)
+        
+        asyncio.run(update_status(file_id,"completed", data=result))
+        
+    except Exception as e:
+        asyncio.run(update_status(file_id, "failed", error=str(e)))
 
 
 def start_worker():
