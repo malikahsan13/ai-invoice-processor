@@ -61,3 +61,13 @@ async def get_invoice(file_id: str):
             return {"error":"Invoice not found"}
         
         return invoice
+    
+@router.get("/", response_model=list[InvoiceResposne])
+async def list_invoices(skip: int=0, limit: int = 10):
+    async with AsyncSessionLocal() as session:
+        result = await session.execute(
+            select(Invoice).offset(skip).limit(limit)
+        )
+        invoices = result.scallers().all()
+        
+        return invoices
