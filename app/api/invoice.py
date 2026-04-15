@@ -2,6 +2,8 @@ from fastapi import APIRouter, UploadFile, File
 import os
 import uuid
 from app.services.queue import push_job
+from app.schemas.invoice import InvoiceResposne
+from sqlalchemy.future import select
 
 router = APIRouter()
 
@@ -45,3 +47,17 @@ async def upload_invoice(file: UploadFile = File(...)):
     #     "filename": file.filename,
     #     "path": file_path
     # }
+
+
+@router.get("/{file_id}", response_model=InvoiceResponse)
+async def get_invoice(file_id: str):
+    async with AsyncSessionLocal() as session:
+        result = await session.execute(
+            select(Invoice).where(Invoice.file_id == file_id)
+        )
+        invoice = result.scaller_one_or_none()
+        
+        if not invoice:
+            return {"error":"Invoice not found"}
+        
+        return invoice
