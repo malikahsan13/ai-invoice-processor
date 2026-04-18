@@ -36,3 +36,12 @@ def validate_invoice_data(data: dict):
         return False, "Invalid due_date format (expected YYYY-MM-DD)"
 
     return True, None
+
+
+def normalize_invoice_data(data: dict) -> dict:
+    return {
+        "vendor_name": data["vendor_name"].strip(),
+        "invoice_number": data["invoice_number"].strip(),
+        "amount": float(data["amount"]),
+        "due_date": data["due_date"]
+    }
